@@ -1,5 +1,53 @@
 #include "vector.hpp"
 
+template<typename T>
+const vecT<T>& vecT<T>::operator= (const vecT<T>& v){
+    for(auto i = 0; i < size; i++)
+        storage_[i] = v(i);
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator- (const vecT<T>& v){
+    for(auto i = 0; i < size; i++)
+        storage_[i] -= v(i);
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator+ (const vecT<T>& v){
+    for(auto i = 0; i < size; i++)
+        storage_[i] += v(i);
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator+ (const T& a){
+    for(auto i = 0; i < size; i++)
+        storage_[i] += a;
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator- (const T& a){
+    for(auto i = 0; i < size; i++)
+        storage_[i] -= a;
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator= (const T& a){
+    for(auto i = 0; i < size; i++)
+        storage_[i] = a;
+    return *this;
+}
+
+template<typename T>
+const vecT<T>& vecT<T>::operator* (const T& a){
+    for(auto i = 0; i < size; i++)
+        storage_[i] += a;
+    return *this;
+}
 
 template<typename T>
 void print_vec(const vecT<T>& v)
@@ -41,15 +89,8 @@ const T dotprod (const vecT<T>&v1, const vecT<T>&v2)
     {
         res += v1(i) * v2(i);
     }
-
     return  res;
 }
-
-
-
-
-
-
 
 
 template<typename T>
