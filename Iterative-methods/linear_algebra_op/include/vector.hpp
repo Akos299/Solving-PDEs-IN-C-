@@ -30,6 +30,7 @@ class vecT {
         const vecT& operator+ (const vecT& );
         const vecT& operator- (const vecT& );
         const vecT& operator= (const vecT&);
+        const vecT& operator += (const vecT&);
         const vecT& operator+ (const T&);
         const vecT& operator- (const T&);
         const vecT& operator= (const T&);
@@ -38,10 +39,9 @@ class vecT {
         //const vecT& vec_resize(const vecT<T>& v, const size_t new_size);
         vecT<T>& subvecT(int i_start, int i_end, size_t vec_len );
         void set_size (const size_t new_size){size = new_size;}
-        
-
+        size_t get_size() const {return size;}
         void set(int i, const T& a) {storage_[i] =  a;}
-        size_t vec_capacity() const {return size;}
+
 };
 
 } 

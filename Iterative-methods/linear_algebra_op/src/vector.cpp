@@ -1,4 +1,4 @@
-#include "vector.hpp"
+#include "../include/vector.hpp"
 
 namespace lin_op  = linalgebra;
 
@@ -47,16 +47,23 @@ const lin_op::vecT<T>& lin_op::vecT<T>::operator= (const T& a){
 template<typename T>
 const lin_op::vecT<T>& lin_op::vecT<T>::operator* (const T& a){
     for(auto i = 0; i < size; i++)
-        storage_[i] += a;
+        storage_[i] *= a;
+    return *this;
+}
+template<typename T>
+const lin_op::vecT<T>& lin_op::vecT<T>::operator+=(const lin_op::vecT<T>& v)
+{
+    for(auto i=0; i < size; i++)
+        storage_[i] += (v(i));
     return *this;
 }
 
 template<typename T>
 void print_vec(const lin_op::vecT<T>& v)
 {
-    std::cout << "start vector print  : " << "\t" << " size  = " << v.vec_capacity() << "\n";
+    std::cout << "start vector print  : " << "\t" << " size  = " << v.get_size() << "\n";
     std::cout << "[ " ;
-    for(int i = 0; i < v.vec_capacity(); i++ )
+    for(int i = 0; i < v.get_size(); i++ )
     {
         std::cout << v(i) << " ";
     }
@@ -65,28 +72,14 @@ void print_vec(const lin_op::vecT<T>& v)
 }
 
 template <typename T>
-inline const T vecNorm2(const lin_op::vecT<T>&v)
-{
-    const size_t N = v.vec_capacity();
-    T res = SQRT(dotprod(v,v));
-    return res; 
-}
-
-template <typename T>
-const T vecNorm1 (const lin_op::vecT<T>&v)
-{
-    const size_t N = v.vec_capacity();
-    T res = 0.;
-    for(size_t i = 0; i < N; i++)
-        res += ABS(v(i));
-    return res;
-}
-
-template <typename T>
 const T dotprod (const lin_op::vecT<T>&v1, const lin_op::vecT<T>&v2)
 {
-    const size_t N = v1.vec_capacity();
     T res = 0.;
+    const size_t N = v1.get_size();
+    bool has_same_size = (N == v2.get());
+    if( !has_same_size)
+        throw std::invalid_argument("vector should have same size\n");
+   
     for(size_t i = 0; i < N; i++)
     {
         res += v1(i) * v2(i);
@@ -94,7 +87,30 @@ const T dotprod (const lin_op::vecT<T>&v1, const lin_op::vecT<T>&v2)
     return  res;
 }
 
+template <typename T>
+inline const T vecNorm2(const lin_op::vecT<T>&v)
+{
+    const size_t N = v.get_size();
+    T res = SQRT(dotprod(v,v));
+    return res; 
+}
 
+template <typename T>
+const T vecNorm1 (const lin_op::vecT<T>&v)
+{
+    const size_t N = v.get_size();
+    T res = 0.;
+    for(size_t i = 0; i < N; i++)
+        res += ABS(v(i));
+    return res;
+}
+
+
+
+
+/**
+ * TODO: CHECK IF THIS WORKS
+ */
 template<typename T>
 lin_op::vecT<T>& lin_op::vecT<T>::subvecT(int i_start, int i_end, size_t vec_len ){
     if(size < vec_len )
@@ -103,7 +119,19 @@ lin_op::vecT<T>& lin_op::vecT<T>::subvecT(int i_start, int i_end, size_t vec_len
         throw std::invalid_argument("invalid range");
 
     lin_op::vecT<T>res(vec_len);
-    for(size_t i = 0; i < i_end; i++)
+    for(size_t i = i_start; i < i_end; i++)
         res(i) = storage_[i];
     return res;
+}
+
+
+template<typename T>
+void my_axpy(const T alpha, lin_op::vecT<T>& x, lin_op::vecT<T>&y)
+{
+    auto N = x.get_size();
+    if(N != y.get_size())
+        throw std::invalid_argument("vectors should have same size\n");
+    
+    for(auto i = 0; i < N; i++)
+        y(i) += a * x(i);
 }

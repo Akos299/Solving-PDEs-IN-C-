@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(linear_algebra_operations)
+project(linear_algebra_operations
+    LANGUAGES C CXX
+)
 
 add_executable(my_linalgebra
     src/main.cpp
