@@ -55,7 +55,7 @@ matT<T> eye(const size_t n);
 // const T dots(size_t N, matT<T>& x, int pos_ptrx, int incx, matT<T>& y, int pos_ptry,int incy);
 
 // matrix-vector multiplication
-template<typename T, class gemv_mode>
+template<typename T, gemv_layering_operation gemv_mode>
 void my_gemv(matT<T>&A, vecT<T>& x, vecT<T>& y);
 
 }

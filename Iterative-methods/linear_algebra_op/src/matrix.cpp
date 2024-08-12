@@ -12,7 +12,7 @@ lin_op::vecT<T> lin_op::matT<T>::get_row(int row_nb) const{
     size_t i = 0;
     while(i < N)
     {
-        res(i) = storage_[row_nb + (i*ld)];
+        res(i) = this->storage_[row_nb + (i*ld)];
         i+=1;
     }
     return res;
@@ -27,7 +27,7 @@ lin_op::vecT<T> lin_op::matT<T>::get_col(int col_nb) const{
     size_t i = 0;
     while(i < N)
     {
-        res(i) = storage_[ld*col_nb + i];
+        res(i) = this->storage_[ld*col_nb + i];
         i+=1;
     }
     return res;
@@ -44,7 +44,7 @@ void lin_op::matT<T>::set_row(int row_nb, vecT<T>& v)
     size_t i = 0;
     for(i; i < N; i++)   
     {
-        storage_[row_nb + (i*ld)] = v(i);
+        this->storage_[row_nb + (i*ld)] = v(i);
     }
 }
 
@@ -59,7 +59,7 @@ void lin_op::matT<T>::set_col(int col_nb, vecT<T>& v)
     size_t i = 0;
     for(; i< N; i++)
     {
-        storage_[ld*col_nb + i] = v(i);
+        this->storage_[ld*col_nb + i] = v(i);
     }
 
 }
@@ -120,7 +120,7 @@ lin_op::matT<T> lin_op::matT<T>::get_submat(int idx_row_start, int idx_row_end, 
 
 }
 
-template<typename T, class gemv_mode>
+template<typename T, gemv_layer_mode gemv_mode>
 void lin_op::my_gemv(lin_op::matT<T>&A, lin_op::vecT<T>&x, lin_op::vecT<T>&y)
 {
     size_t nb_rowA {A.get_nb_rows()}, nb_x{x.get_size()}, nb_y{y.get_size()};

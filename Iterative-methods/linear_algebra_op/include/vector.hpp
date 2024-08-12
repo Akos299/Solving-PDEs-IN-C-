@@ -19,7 +19,7 @@ class vecT {
     public:
         vecT(){}
         vecT(size_t n) :storage_(n), size(n) {}
-        vecT(std::vector<T>& v): storage_{v.data()}, size(v.size()){}
+        // vecT(std::vector<T> v): storage_{v.data()}, size(v.size()){}
         ~vecT(){}
 
         decltype(auto) data()       { return storage_.data(); }
@@ -43,7 +43,10 @@ class vecT {
         void set(int i, const T& a) {storage_[i] =  a;}
 
 };
-
+template<typename T>
+void print_vec(const vecT<T>& v);
+template <typename T>
+const T dotprod (const vecT<T>&v1, const vecT<T>&v2);
 } 
 
 #endif

@@ -133,5 +133,5 @@ void my_axpy(const T alpha, lin_op::vecT<T>& x, lin_op::vecT<T>&y)
         throw std::invalid_argument("vectors should have same size\n");
     
     for(auto i = 0; i < N; i++)
-        y(i) += a * x(i);
+        y(i) += alpha * x(i);
 }
