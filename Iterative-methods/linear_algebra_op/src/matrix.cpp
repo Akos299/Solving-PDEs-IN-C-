@@ -1,13 +1,15 @@
-#include "../include/matrix.hpp"
+#include <../include/matrix.hpp>
+#include <../include/vector.hpp>
 
-namespace lin_op = linalgebra;
-using gemv_layer_mode = lin_op::gemv_layering_operation;
+
+
+using gemv_layer_mode = gemv_layering_operation;
 
 template<typename T>
-lin_op::vecT<T> lin_op::matT<T>::get_row(int row_nb) const{
+vecT<T> matT<T>::get_row(int row_nb) const{
     
     auto N = get_nb_cols();
-    lin_op::vecT<T> res(N);
+    vecT<T> res(0,N);
     auto ld = get_leading_dim();
     size_t i = 0;
     while(i < N)
@@ -19,10 +21,10 @@ lin_op::vecT<T> lin_op::matT<T>::get_row(int row_nb) const{
 }
 
 template<typename T>
-lin_op::vecT<T> lin_op::matT<T>::get_col(int col_nb) const{
+vecT<T> matT<T>::get_col(int col_nb) const{
 
     auto N = get_nb_rows();
-    lin_op::vecT<T> res(N);
+    vecT<T> res(N);
     auto ld = get_leading_dim();
     size_t i = 0;
     while(i < N)
@@ -34,7 +36,7 @@ lin_op::vecT<T> lin_op::matT<T>::get_col(int col_nb) const{
 }
 
 template<typename T>
-void lin_op::matT<T>::set_row(int row_nb, vecT<T>& v)
+void matT<T>::set_row(int row_nb, vecT<T>& v)
 {
     auto N = v.get_size();
     auto ld = get_leading_dim();
@@ -49,7 +51,7 @@ void lin_op::matT<T>::set_row(int row_nb, vecT<T>& v)
 }
 
 template<typename T>
-void lin_op::matT<T>::set_col(int col_nb, vecT<T>& v)
+void matT<T>::set_col(int col_nb, vecT<T>& v)
 {
     auto N = v.get_size();
     auto ld = get_leading_dim();
@@ -65,7 +67,7 @@ void lin_op::matT<T>::set_col(int col_nb, vecT<T>& v)
 }
 
 template<typename T>
-void lin_op::GEMAd(const lin_op::matT<T>& A, const lin_op::matT<T>& B, const T a , const T b)
+void GEMAd(const matT<T>& A, const matT<T>& B, const T a , const T b)
 {
     if (A.get_leading_dim() != B.get_leading_dim())
         throw std::invalid_argument("The two matrices should have same leading dimensions.\n");
@@ -81,7 +83,7 @@ void lin_op::GEMAd(const lin_op::matT<T>& A, const lin_op::matT<T>& B, const T a
 }
 
 template<typename T>
-void lin_op::AdScalToMat(const lin_op::matT<T>& A, const T a)
+void AdScalToMat(const matT<T>& A, const T a)
 {
 
     size_t ncol { A.get_nb_cols()}, nrow {A.get_nb_rows()};
@@ -92,15 +94,15 @@ void lin_op::AdScalToMat(const lin_op::matT<T>& A, const T a)
 }
 
 template<typename T>
-lin_op::matT<T> lin_op::eye(const size_t n) {
-    lin_op::matT<T> I_nn(n,n);
+matT<T> eye(const size_t n) {
+    matT<T> I_nn(n,n);
     for(size_t i = 0; i < n; i++)   I_nn[i*n + i] = (T)1.0;
     return I_nn;
 }
 
 
 template<typename T>
-lin_op::matT<T> lin_op::matT<T>::get_submat(int idx_row_start, int idx_row_end, int idx_col_start, int idx_col_end) const
+matT<T> matT<T>::get_submat(int idx_row_start, int idx_row_end, int idx_col_start, int idx_col_end) const
 {
     size_t nb_row{get_nb_rows()}, nb_col{get_nb_cols()};
     if((idx_col_start < 0 ) || (idx_col_end > nb_col) || (idx_col_end <= idx_col_start))
@@ -121,7 +123,7 @@ lin_op::matT<T> lin_op::matT<T>::get_submat(int idx_row_start, int idx_row_end, 
 }
 
 template<typename T, gemv_layer_mode gemv_mode>
-void lin_op::my_gemv(lin_op::matT<T>&A, lin_op::vecT<T>&x, lin_op::vecT<T>&y)
+void my_gemv(matT<T>&A, vecT<T>&x, vecT<T>&y)
 {
     size_t nb_rowA {A.get_nb_rows()}, nb_x{x.get_size()}, nb_y{y.get_size()};
     if((nb_rowA != nb_x) || (nb_rowA != nb_y))
@@ -141,3 +143,4 @@ void lin_op::my_gemv(lin_op::matT<T>&A, lin_op::vecT<T>&x, lin_op::vecT<T>&y)
         }
         
 }
+

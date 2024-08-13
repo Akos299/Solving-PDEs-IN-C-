@@ -5,21 +5,51 @@
 #include <vector>
 #include <stdexcept>
 
-#include "vector.hpp"
+#include <../include/vector.hpp>
 
-namespace linalgebra{
+
 
 template<typename T>
 class matT : public vecT<T>{
     private:
     size_t _nrows, _ncols;
     size_t _ld; // leading dimensions of the matrix we suppose that we are working in column-major
+    
     public:
-    matT(size_t nrow, size_t ncol):_nrows(nrow), _ncols(ncol)
+    matT(){}
+
+    matT(const size_t nrow, const size_t ncol):_nrows(nrow), _ncols(ncol)
     {
         _ld = _ncols;
         this->set_size(nrow * ncol);
         this->vec_resize(nrow * ncol);
+    }
+
+    matT(const matT& M){
+        _nrows(M.get_nb_rows());
+        _ncols(M.get_nb_cols());
+        _ld(M.get_leading_dim());
+        for(size_t i = 0; i < _ncols; i++)
+        {
+            auto col = M.get_col(i);
+            set_col(i,col);
+        }
+    }
+
+    const matT& operator= (const matT& M)
+    {
+        _nrows(M.get_nb_rows());
+        _ncols(M.get_nb_cols());
+        _ld(M.get_leading_dim());
+        for(size_t i = 0; i < _ncols; i++)
+        {
+            auto col = M.get_col(i);
+            set_col(i,col);
+        }
+    }
+
+    const T operator() (size_t i, size_t j) {
+        return this->storage_[_ld*j + i];
     }
 
     vecT<T> get_row(int row_nb) const;
@@ -58,7 +88,6 @@ matT<T> eye(const size_t n);
 template<typename T, gemv_layering_operation gemv_mode>
 void my_gemv(matT<T>&A, vecT<T>& x, vecT<T>& y);
 
-}
 
 
 #endif

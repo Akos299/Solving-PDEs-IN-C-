@@ -1,40 +1,22 @@
-#cmake_minimum_required(VERSION 3.22)
-
-cmake_minimum_required(VERSION 3.7)
-
-if(${CMAKE_VERSION} VERSION_LESS 3.22)
-    cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
-else()
-    cmake_policy(VERSION 3.22)
-endif()
+cmake_minimum_required(VERSION 3.22)
 
 
-
-set(My_project_name  linear_algebra_operations)
-
-
-project(${My_project_name}
+project(my_project
     LANGUAGES C CXX
 )
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+# set(Sources 
+#     src/matrix.cpp 
+#     src/vector.cpp)
 
-enable_testing()
+# set(Headers 
+#     ./include/vector.hpp 
+#     ./include/matrix.hpp)
 
-add_subdirectory(googletest)
-
-set(Headers 
-    ./include/vector.hpp
-    ./include/matrix.hpp
-    )
-
-set(Sources 
-    ./src/vector.cpp 
-    ./src/matrix.cpp 
-    ./src/main.cpp)
-
-add_library(${My_project_name} STATIC ${Sources} ${Headers})
-
-add_subdirectory(test)
+# add_library(lin_operations STATIC ${Sources} ${Headers} )
+# target_include_directories(lin_operations PUBLIC ./include)
+# target_compile_features(lin_operations PUBLIC cxx_std_11)
+# add_executable(my_main src/main.cpp)
+# target_link_libraries(my_main PUBLIC lin_operations)
+add_subdirectory(src)
+add_subdirectory(app)
