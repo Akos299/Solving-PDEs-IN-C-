@@ -1,6 +1,6 @@
 #include<iostream>
-#include <../include/vector.hpp>
-#include <../include/matrix.hpp>
+#include "vector.hpp"
+#include "matrix.hpp"
 
 
 
