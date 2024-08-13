@@ -1,7 +1,4 @@
-
-set(Sources 
-    matrix.cpp 
-    vector.cpp)
+set(Sources matrix.cpp vector.cpp)
 
 set(INCLUDE_DIR 
     ../include)
