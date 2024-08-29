@@ -1,6 +1,7 @@
 #ifndef MATRIX_CLASS
 #define MATRIX_CLASS
 
+#include <cstddef>
 #include <iostream>
 #include <vector>
 #include <stdexcept>
@@ -18,14 +19,15 @@ class matT : public vecT<T>{
     public:
     matT(){}
 
-    matT(const size_t nrow, const size_t ncol):_nrows(nrow), _ncols(ncol)
+    matT(const size_t nrow, const size_t ncol): vecT<T>(1.0, nrow * ncol) ,_nrows(nrow), _ncols(ncol)
     {
         _ld = _ncols;
-        this->set_size(nrow * ncol);
-        this->vec_resize(nrow * ncol);
+        // this->set_size(nrow * ncol);
+        // this->vec_resize(nrow * ncol);
     }
 
-    matT(const matT& M){
+    // copy constructor
+    matT(const matT& M) :  vecT<T> (M){
         _nrows =M.get_nb_rows();
         _ncols =M.get_nb_cols();
         _ld = M.get_leading_dim();
@@ -36,6 +38,7 @@ class matT : public vecT<T>{
         }
     }
 
+    // assignment operator
     const matT& operator= (const matT& M)
     {
         _nrows = M.get_nb_rows();
@@ -218,6 +221,23 @@ void my_gemv(matT<T>&A, vecT<T>&x, vecT<T>&y)
         
 }
 
+template<typename T>
+matT<T> kroneker_product(const matT<T>& A, const matT<T>& B)
+{
+    size_t ncols = A.get_nb_cols() * B.get_nb_cols();
+    size_t nrows = A.get_nb_rows() * B.get_nb_rows();
+
+    matT<T> res (nrows, ncols);
+    for(size_t i =0; i < A.get_nb_cols(); i++)
+    {
+        for(size_t j = 0; j < A.get_nb_rows(); j++)
+        {
+            auto  a_ij = A(i,j);
+            matT<T> _mat = B*a_ij;
+        }
+    }
+
+}
 
 
 #endif

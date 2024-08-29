@@ -13,7 +13,7 @@
 
 template <typename T>
 class vecT {
-    private:
+    protected:
     std::vector<T> storage_;
     size_t size_;
 
@@ -38,27 +38,34 @@ class vecT {
         const vecT& operator /= (const T&);
 
         const vecT& operator= (const T&);
-        const vecT& operator=( const vecT&);
+        const vecT& operator= (const vecT&);
 
         const vecT& vec_resize(const size_t new_size){
             size_ = new_size;
             storage_.resize(new_size);
             return *this; 
         }       
+
+        // extract subvector of size vec_len
         vecT<T> subvector(int i_start, int i_end, size_t vec_len );
+        // set size to new_size
         void set_size (const size_t new_size){size_ = new_size;}
+        // get size of vector
         size_t get_size() const {return size_;}
+        // set all component of vector to a
         void set(int i, const T& a) {storage_[i] =  a;}
+        // get ptr to vector storage
         std::vector<T> get_storage()const{return storage_; }
 };
 
-
+// constructor
 template<typename T>
 vecT<T>::vecT(const T  a, const size_t N) : size_(N){
     storage_.resize(N);
     for(size_t i=0; i < N; i++) storage_[i] = a;
 }
 
+// constructor
 template<typename T>
 vecT<T>::vecT(const vecT<T>&v ) 
 {
@@ -67,7 +74,7 @@ vecT<T>::vecT(const vecT<T>&v )
         storage_[i] = v(i);
 }
 
-
+//unary addition operator (with a vector)
 template<typename T>
 const vecT<T>& vecT<T>::operator+=(const vecT<T>& v)
 {
@@ -79,6 +86,8 @@ const vecT<T>& vecT<T>::operator+=(const vecT<T>& v)
     return *this;
 }
 
+
+// unary addition operator (with a scalar)
 template<typename T>
 const vecT<T>& vecT<T>::operator+=(const T& a)
 {
@@ -87,6 +96,7 @@ const vecT<T>& vecT<T>::operator+=(const T& a)
     return *this;
 }
 
+// unary substraction (with a vector)
 template<typename T>
 const vecT<T>& vecT<T>::operator-=(const vecT<T>& v)
 {
@@ -99,6 +109,7 @@ const vecT<T>& vecT<T>::operator-=(const vecT<T>& v)
     return *this;
 }
 
+// unary substraction operator(with a scalar)
 template<typename T>
 const vecT<T>& vecT<T>::operator-=(const T& a)
 {
@@ -107,6 +118,7 @@ const vecT<T>& vecT<T>::operator-=(const T& a)
     return *this;
 }
 
+// unary multiplication operator (with a scalar)
 template<typename T>
 const vecT<T>& vecT<T>::operator*=(const T& a)
 {
@@ -115,6 +127,7 @@ const vecT<T>& vecT<T>::operator*=(const T& a)
     return *this;
 }
 
+// unary division operator with a scalar
 template<typename T>
 const vecT<T>& vecT<T>::operator/=(const T& a)
 {
@@ -125,6 +138,8 @@ const vecT<T>& vecT<T>::operator/=(const T& a)
     return *this;
 }
 
+
+// unary assignement operator with a scalar 
 template<typename T>
 const vecT<T>& vecT<T>::operator=(const T& a)
 {
@@ -133,6 +148,8 @@ const vecT<T>& vecT<T>::operator=(const T& a)
     return *this;
 }
 
+
+// unary assignement operator with a vector
 template<typename T>
 const vecT<T>& vecT<T>::operator=(const vecT<T>& v)
 {
@@ -148,13 +165,14 @@ const vecT<T>& vecT<T>::operator=(const vecT<T>& v)
 
 
 
-/***/
+// multiply a vector by -1
 template<typename T>
 const vecT<T>& operator-(const vecT<T>& v)
 {
     return vecT<T>(v) *=-1;
 }
 
+// add two vectors
 template<typename T>
 const vecT<T>& operator+(const vecT<T>& v1, const vecT<T>& v2)
 {
@@ -162,7 +180,7 @@ const vecT<T>& operator+(const vecT<T>& v1, const vecT<T>& v2)
 }
 
 
-/***/
+// print a vector
 template<typename T>
 void print_vec(const vecT<T>& v)
 {
@@ -176,6 +194,7 @@ void print_vec(const vecT<T>& v)
     
 }
 
+// dotprod between vectors
 template <typename T>
 const T dotprod (const vecT<T>&v1, const vecT<T>&v2)
 {
@@ -192,6 +211,8 @@ const T dotprod (const vecT<T>&v1, const vecT<T>&v2)
     return  res;
 }
 
+
+// L2 norm of vector
 template <typename T>
 inline const T Norm2(const vecT<T>&v)
 {
@@ -200,6 +221,8 @@ inline const T Norm2(const vecT<T>&v)
     return res; 
 }
 
+
+// L1 norm of vector
 template <typename T>
 const T Norm1 (const vecT<T>&v)
 {
@@ -211,6 +234,8 @@ const T Norm1 (const vecT<T>&v)
     return res;
 }
 
+
+// subvector
 template<typename T>
 vecT<T> vecT<T>::subvector(int i_start, int i_end, size_t vec_len ){
     if(size_ < vec_len )
@@ -232,6 +257,8 @@ vecT<T> vecT<T>::subvector(int i_start, int i_end, size_t vec_len ){
     return res;
 }
 
+
+// AXPY operation
 template<typename T>
 void my_axpy(const T alpha, vecT<T>& x, vecT<T>&y)
 {
